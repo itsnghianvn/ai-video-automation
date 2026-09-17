@@ -1,26 +1,24 @@
 import asyncio
+
 import edge_tts
 
 
-TEXT = """
-Hello everyone.
+INPUT_FILE = "script.txt"
+OUTPUT_FILE = "voice.mp3"
 
-Today, we are going to learn three interesting facts about space.
-
-The universe is incredibly large, and there are billions of galaxies.
-"""
+VOICE = "en-US-AriaNeural"
 
 
 async def generate_voice():
-    voice = "en-US-AriaNeural"
+    with open(INPUT_FILE, "r", encoding="utf-8") as file:
+        text = file.read()
 
-    communicate = edge_tts.Communicate(
-        TEXT,
-        voice
-    )
+    communicate = edge_tts.Communicate(text, VOICE)
 
-    await communicate.save("voice.mp3")
+    await communicate.save(OUTPUT_FILE)
 
 
 if __name__ == "__main__":
     asyncio.run(generate_voice())
+
+    print("Voice generated successfully:", OUTPUT_FILE)
