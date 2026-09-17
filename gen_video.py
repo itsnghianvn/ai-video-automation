@@ -37,7 +37,10 @@ def merge_scenes():
         "-i", "scene2.mp4",
         "-i", "scene3.mp4",
         "-filter_complex",
-        "[0:v][1:v][2:v]concat=n=3:v=1:a=0[v]",
+        (
+            "[0:v][1:v]xfade=transition=fade:duration=1:offset=3[v01];"
+            "[v01][2:v]xfade=transition=fade:duration=1:offset=6[v]"
+        ),
         "-map", "[v]",
         "-c:v", "libx264",
         "-pix_fmt", "yuv420p",
@@ -53,7 +56,8 @@ def add_voice():
         "-y",
         "-i", "merged.mp4",
         "-i", VOICE,
-        "-c:v", "copy",
+        "-vf", "subtitles=filename='subtitle.srt'",
+        "-c:v", "libx264",
         "-c:a", "aac",
         "-shortest",
         OUTPUT,
